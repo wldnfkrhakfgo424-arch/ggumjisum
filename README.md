@@ -1,411 +1,297 @@
-# 거지섬 (Gujisum) — 게이미피케이션 일일 예산 트래커
+# 🏝️ 거지섬 (Ggumjisum)
 
-> **"예산은 계산 도구가 아니라, 행동을 유도하는 게임 규칙이다."**
+<div align="center">
 
----
+**섬이 가라앉기 전에 지출을 관리하세요!**
 
-## 프로젝트 개요
+게이미피케이션 × 일일 예산 트래커
 
-**거지섬**은 "섬이 가라앉기 전에 지출을 관리하세요!"라는 컨셉의 게이미피케이션 예산 트래커 PWA입니다.
+[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
+[![React](https://img.shields.io/badge/React-19-blue)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)](https://www.typescriptlang.org/)
+[![Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black)](https://ggumjisum.vercel.app/)
 
-- **핵심 엔진**: Visual Loss Engine — 지출이 늘어날수록 섬이 물에 잠김. 해수면 상승.
-- **타겟**: 가계부 습관이 없는 Gen Z
-- **UX 원칙**: 월 단위(감각 없음) 대신 **일 단위(체감 가능)** 예산 관리
-- **개발 맥락**: 1-day 해커톤 MVP
+[🌐 라이브 데모](https://ggumjisum.vercel.app/) | [📖 해커톤 제출 자료](./HACKATHON_SUBMISSION.md)
 
----
-
-## 핵심 게임 루프
-
-```
-채팅 입력 ("스타벅스 5000원")
-    ↓
-NLP 파싱 (mock 또는 gpt-4o-mini)
-    ↓
-거래 저장 (type, amount, category, description)
-    ↓
-일일 예산 비율 계산 (todaySpend / dailyBudget)
-    ↓
-섬 상태 변경
-  - 0~40%   → sunny  (맑음)
-  - 40~70%  → cloudy (흐림)
-  - 70~100% → storm  (폭풍)
-  - 100%+   → sunk   (침몰!)
-    ↓
-침몰 시 → 퀴즈 모달 → 정답 시 70%로 복구
-```
-
-**예산 공식:**
-```
-dailyBudget = monthlyBudget / 30
-ratio = todaySpend / dailyBudget
-```
-
-**존 시스템:**
-| 존 | 비율 | 섬 상태 | 날씨 |
-|---|---|---|---|
-| SAFE | 0~70% | safe | sunny → cloudy |
-| WARNING | 70~100% | warning | storm |
-| OVER | 100%+ | sunk | 침몰 + 퀴즈 |
+</div>
 
 ---
 
-## 기술 스택
+## 📸 스크린샷
 
-| 기술 | 용도 | 버전 |
-|---|---|---|
-| **Next.js** | App Router, SSR/SSG | 16.1.6 |
-| **TypeScript** | 타입 안전성 | ^5 |
-| **Tailwind CSS** | 스타일링 | v4 |
-| **shadcn/ui** | UI 컴포넌트 (Button, Card, Dialog, Input) | 3.8.4 |
-| **Framer Motion** | 섬/물 애니메이션, 전환 효과 | 12.33.0 |
-| **Zustand** | 전역 상태 관리 (persist middleware) | 5.0.11 |
-| **Supabase** | DB (미연결, Phase 2 예정) | ^2.95.3 |
-| **OpenAI** | NLP 파싱 (기본: mock 모드) | - |
-| **Lucide React** | 아이콘 | 0.563.0 |
+### 랜딩 페이지
+![Landing Page](./docs/screenshots/landing.png)
+> Google 수준의 UI/UX로 프로젝트를 소개하는 랜딩 페이지
+
+### 메인 앱 - 섬 가라앉기
+![Island Sinking](./docs/screenshots/island-sinking.png)
+> 지출할수록 섬이 실시간으로 물에 잠기는 Visual Loss Engine
+
+### 5중 경각심 시스템
+![Alert System](./docs/screenshots/alert-system.png)
+> 날씨, 파도, 경고등, HP바, 캐릭터까지 5가지 시각적 피드백
 
 ---
 
-## 프로젝트 구조
+## 🎯 프로젝트 소개
+
+### 문제 인식
+Gen Z는 왜 가계부를 안 쓸까?
+1. **월 단위는 감각이 없다** - 30일 뒤는 너무 멀어요
+2. **숫자만 보여주면 지루하다** - 딱딱한 표와 그래프는 NO
+3. **위기감이 없어서 통제 실패** - 숫자만으로는 행동을 바꾸기 어려움
+
+### 솔루션: Visual Loss Engine
+**"내 섬이 가라앉는다" = 즉각적인 위기감**
+
+- 지출할수록 섬이 **실시간으로 물에 잠김**
+- 단순한 숫자가 아닌 **시각적 손실**로 직관적 피드백
+- **일일 예산 모델**: 오늘 하루에 집중
+
+---
+
+## ✨ 핵심 기능
+
+### 🌊 5중 경각심 시스템
+예산 사용률에 따라 5가지 시각적 피드백이 동시에 작동:
+
+| 비율 | 날씨 | 파도 | 경고등 | HP바 | 캐릭터 |
+|------|------|------|--------|------|--------|
+| 0-30% | ☀️ 맑음 | 느림 | - | 초록 | 평온 |
+| 30-70% | ⛅ 흐림 | 보통 | - | 노랑 | 불안 |
+| 70-100% | ⛈️ 폭풍 | **3배 빠름** | ⚠️ 표시 | 빨강 | 위험 |
+| 100%+ | 🌊 침몰 | 격렬 | 🆘 | 비어있음 | 휩쓸림 |
+
+### 🏝️ 섬 진화 시스템
+연속 절약 시 섬이 5단계로 진화:
+- Lv.0 무인도 🏝️ (0일)
+- Lv.1 텐트 ⛺ (3일)
+- Lv.2 오두막 🏕️ (7일)
+- Lv.3 작은 집 🏠 (14일)
+- Lv.4 마을 🏘️ (30일)
+
+### 💬 자연어 입력 (NLP)
+"스타벅스 5000원" → 자동으로 파싱하여 카테고리 분류
+
+### 👥 소셜 기능
+- **리더보드**: 절약률 기준 실시간 랭킹
+- **이웃 섬 방문**: 다른 사용자의 섬 구경 & 팁 공유
+
+### 📊 분석 대시보드
+- 주간/월간 지출 추이 그래프
+- 카테고리별 지출 분석
+- 절약률 트렌드
+
+### 🔥 스트릭 시스템
+- 연속 절약일 기록
+- 3일/7일 달성 시 보상 잠금 해제
+
+### 🎯 복구 퀴즈
+예산 초과 시 퀴즈를 풀면 70% 지점으로 복구 가능
+
+---
+
+## 🛠️ 기술 스택
+
+### Frontend
+- **Framework**: Next.js 16 (App Router)
+- **UI Library**: React 19
+- **Language**: TypeScript 5
+- **Styling**: Tailwind CSS 4
+- **Animation**: Framer Motion 12
+- **Charts**: Recharts 3
+
+### Backend & Database
+- **BaaS**: Supabase 2 (PostgreSQL)
+- **Real-time Sync**: Supabase Realtime
+- **Authentication**: Supabase Auth (준비 중)
+
+### State Management
+- **Global State**: Zustand 5
+- **Persistence**: Zustand Persist Middleware
+
+### Deployment
+- **Hosting**: Vercel
+- **CI/CD**: Vercel Auto Deploy
+
+---
+
+## 🚀 시작하기
+
+### 사전 요구사항
+- Node.js 18.17 이상
+- npm 또는 yarn
+
+### 설치 및 실행
+
+```bash
+# 저장소 클론
+git clone https://github.com/wldnfkrhakfgo424-arch/ggumjisum.git
+cd ggumjisum
+
+# 의존성 설치
+npm install
+
+# 환경 변수 설정
+cp .env.example .env.local
+# .env.local 파일에 Supabase 키 입력
+
+# 개발 서버 실행
+npm run dev
+```
+
+브라우저에서 http://localhost:3000 접속
+
+### 환경 변수
+
+`.env.local` 파일에 다음 변수 설정:
+
+```env
+# AI Mode: "mock" (default) or "live"
+NEXT_PUBLIC_AI_MODE=mock
+
+# OpenAI (only if AI_MODE=live)
+OPENAI_API_KEY=your_openai_api_key
+
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+---
+
+## 📦 프로젝트 구조
 
 ```
 ggumjisum/
-├── public/
-│   └── manifest.json              # PWA 매니페스트
 ├── src/
-│   ├── app/                       # Next.js App Router
-│   │   ├── api/nlp/route.ts       # POST: 한국어 거래 텍스트 NLP 파싱
-│   │   ├── history/page.tsx       # 전체 거래 내역 페이지
-│   │   ├── island/page.tsx        # 메인 섬 페이지 (핵심 화면)
-│   │   ├── onboarding/page.tsx    # 온보딩 래퍼
-│   │   ├── layout.tsx             # 루트 레이아웃 (폰트, 메타데이터, PWA)
-│   │   ├── page.tsx               # / → /island 또는 /onboarding 리다이렉트
-│   │   └── globals.css            # Tailwind + shadcn 테마 변수
-│   ├── components/ui/             # shadcn/ui 컴포넌트
-│   │   ├── button.tsx
-│   │   ├── card.tsx
-│   │   ├── dialog.tsx
-│   │   └── input.tsx
-│   ├── features/                  # 도메인별 기능 모듈
-│   │   ├── chat/
-│   │   │   └── ChatInterface.tsx  # 채팅 UI + /api/nlp 호출
-│   │   ├── history/
-│   │   │   └── TransactionList.tsx # 거래 목록 (편집/삭제/원문보기)
-│   │   ├── island/
-│   │   │   ├── IslandVisualizer.tsx # 섬 시각화 (물/하늘/날씨/게이지)
-│   │   │   └── IslandCharacter.tsx  # 픽셀 캐릭터 + 상태별 대사
-│   │   ├── onboarding/
-│   │   │   └── OnboardingForm.tsx  # 3단계 온보딩 (닉네임/예산/리셋일)
-│   │   └── rescue/
-│   │       └── RescueQuizModal.tsx # 구조 퀴즈 (15문제, 셔플, 카테고리 기반)
-│   ├── lib/
-│   │   ├── env.ts                 # 환경변수 검증 + mock/live 플래그
-│   │   └── utils.ts               # cn() 유틸 (tailwind-merge)
-│   ├── store/
-│   │   └── useStore.ts            # Zustand 스토어 (일일 예산 모델)
-│   └── utils/
-│       └── mock-nlp.ts            # Mock NLP 파서 (수입/지출 감지, 카테고리)
-├── .env.local                     # 환경변수 (AI_MODE=mock 기본)
-├── .env.example                   # 환경변수 템플릿
-├── package.json
-└── tsconfig.json
+│   ├── app/                    # Next.js App Router
+│   │   ├── page.tsx           # 랜딩 페이지
+│   │   ├── onboarding/        # 온보딩 (닉네임, 예산 설정)
+│   │   ├── island/            # 메인 앱
+│   │   ├── leaderboard/       # 리더보드
+│   │   ├── history/           # 분석 대시보드
+│   │   └── api/               # API Routes
+│   ├── features/              # 기능별 컴포넌트
+│   │   ├── chat/             # 채팅 입력
+│   │   ├── island/           # 섬 시각화
+│   │   ├── onboarding/       # 온보딩 폼
+│   │   ├── rescue/           # 복구 퀴즈
+│   │   └── history/          # 분석 차트
+│   ├── components/           # 공통 UI 컴포넌트
+│   ├── store/                # Zustand Store
+│   ├── lib/                  # 유틸리티
+│   └── utils/                # Helper 함수
+├── public/                   # 정적 파일
+├── HACKATHON_SUBMISSION.md  # 해커톤 제출 자료
+└── README.md                # 이 파일
 ```
-
-**아키텍처 규칙:**
-- `features/` 간 직접 임포트 금지 (반드시 `lib/` 또는 `utils/`를 통해서)
-- UI 컴포넌트: `components/`
-- 비즈니스 로직: `features/` 또는 `utils/`
-- DB/API 클라이언트: `lib/`
-- 전역 상태: `store/`
 
 ---
 
-## 데이터 모델
-
-### User
-```typescript
-interface User {
-  id: string;          // UUID
-  nickname: string;    // 닉네임
-  budget_limit: number; // 월 예산 (원)
-  reset_day: number;   // 리셋일 (1~31) — 현재 미사용
-}
-```
-
-### Transaction
-```typescript
-interface Transaction {
-  id: string;            // UUID
-  type: 'expense' | 'income';
-  amount: number;        // 금액 (원)
-  category: string;      // coffee|food|transport|drink|shopping|entertainment|health|etc
-  description: string;   // NLP 요약 키워드
-  original_input: string; // 사용자 입력 원문
-  occurred_at: string;   // ISO 8601 타임스탬프
-}
-```
-
-### Island Status
-```typescript
-type IslandStatus = 'safe' | 'warning' | 'sunk';
-```
-
-### Zustand Store 주요 상태
-```typescript
-// 핵심 상태
-user: User | null
-today_spend: number        // 오늘 지출 합계
-last_spend_date: string    // "2026-02-09" — 날짜 바뀌면 자동 리셋
-island_status: IslandStatus
-transactions: Transaction[] // 최대 200개
-
-// Computed
-getDailyBudget()           // user.budget_limit / 30
-getRatio()                 // today_spend / dailyBudget
-getRemainingBudget()       // dailyBudget - today_spend
-getWaterLevel()            // ratio * 100 (capped at 100)
-
-// Actions
-addTransaction(tx)         // 거래 추가 + spend 업데이트
-updateTransaction(id, updates)  // 카테고리/설명 수정
-deleteTransaction(id)      // 삭제 + spend 재계산
-restoreIsland()            // 퀴즈 정답 시 → spend = dailyBudget * 0.7
-ensureTodayReset()         // 날짜 변경 시 자동 리셋
-```
-
-### 영속성
-- Zustand `persist` 미들웨어 → `localStorage` (키: `ggumjisum-storage`)
-- Supabase 연동은 Phase 2 예정
-
----
-
-## 라우트 맵
-
-### 페이지
-| 경로 | 파일 | 설명 |
-|---|---|---|
-| `/` | `app/page.tsx` | 유저 유무에 따라 리다이렉트 |
-| `/onboarding` | `app/onboarding/page.tsx` | 닉네임 → 예산 → 리셋일 설정 |
-| `/island` | `app/island/page.tsx` | 메인 화면 (섬 + 채팅 + 최근기록) |
-| `/history` | `app/history/page.tsx` | 전체 거래 내역 (편집/삭제/원문) |
-
-### API
-| 메서드 | 경로 | 설명 |
-|---|---|---|
-| POST | `/api/nlp` | 한국어 텍스트 → `{type, amount, category, description}` |
-
----
-
-## 현재 완료 상태 (Phase 1 + 1.5)
-
-### Phase 1 — UI Skeleton + Mock State
-- [x] Next.js 프로젝트 초기화 + Tailwind + shadcn/ui
-- [x] 온보딩 폼 (3단계)
-- [x] 섬 시각화 (픽셀 아트 SVG + Framer Motion)
-- [x] 채팅 인터페이스 + Mock NLP
-- [x] 구조 퀴즈 모달
-- [x] Zustand 스토어 + localStorage 영속성
-
-### Phase 1.5 — 일일 예산 모델 + 기능 강화
-- [x] 월 예산 → 일일 예산 모델 전환 (`budget_limit / 30`)
-- [x] 수입/지출 구분 (수입은 spend 차감)
-- [x] NLP 파서 개선 (금액 파싱 강화, 조사 제거, 수입 키워드 정교화)
-- [x] 카테고리 자동 분류 (8개 카테고리, 키워드 사전)
-- [x] 키워드 요약 (조사/불용어/종결어미 제거)
-- [x] 퀴즈 풀 확장 (15문제, 보기 셔플, 카테고리 기반 출제)
-- [x] 섬 캐릭터 + 상태별 자동 대사 (6초 간격)
-- [x] 가계부 페이지 (날짜 그룹핑, 편집, 삭제, 원문 보기)
-- [x] /api/nlp 라우트 (mock/live 분기, rate limit)
-- [x] 거래 수정/삭제 + spend 재계산
-
----
-
-## 알려진 이슈
-
-### 1. `ensureTodayReset` 앱 로드 시 미실행
-- **현상**: `ensureTodayReset()`이 `addTransaction()` 내부에서만 호출됨
-- **영향**: 다음 날 앱을 열어도 거래를 추가하기 전까지 어제의 `today_spend`가 남아있음
-- **해결**: `/island` 페이지 로드 시 `ensureTodayReset()` 호출 추가
-
-### 2. Supabase 미연결
-- **현상**: 모든 데이터가 `localStorage`에만 저장됨
-- **영향**: 브라우저 데이터 삭제 시 모든 기록 소실
-- **해결**: Phase 2에서 Supabase 연동
-
-### 3. `reset_day` 미사용
-- **현상**: 온보딩에서 리셋일(1~31)을 입력받지만, 실제 리셋 로직에서 사용하지 않음
-- **영향**: 월별 예산 리셋이 안 됨 (일일 리셋만 동작)
-- **해결**: Phase 2에서 월별 리셋 로직 구현 (선택사항, MVP에서는 일일 모델로 충분)
-
----
-
-## 환경변수 설정
-
-```bash
-# .env.local
-NEXT_PUBLIC_AI_MODE=mock           # "mock" (기본, API 호출 없음) 또는 "live"
-OPENAI_API_KEY=                    # live 모드에서만 필요
-NEXT_PUBLIC_SUPABASE_URL=          # Phase 2에서 설정
-NEXT_PUBLIC_SUPABASE_ANON_KEY=     # Phase 2에서 설정
-```
-
-**비용 안전 규칙:**
-- `AI_MODE`는 반드시 `mock`이 기본값
-- live 모드에서는 `gpt-4o-mini`만 사용
-- `max_tokens: 200`, IP당 분당 20회 rate limit 적용
-- OpenAI 호출은 서버 라우트 핸들러에서만 (클라이언트 직접 호출 금지)
-
----
-
-## 실행 방법 (Quick Start)
-
-```bash
-# 1. 의존성 설치
-cd ggumjisum
-npm install
-
-# 2. 환경변수 설정
-cp .env.example .env.local
-# .env.local 편집 (기본값은 mock 모드)
-
-# 3. 개발 서버 시작
-npm run dev
-
-# 4. 브라우저에서 접속
-open http://localhost:3000
-```
-
-**데모 시나리오 (1분):**
-1. 온보딩: 닉네임 "부산", 월 예산 30만원, 리셋일 1일
-2. 지출: "스타벅스 4500원" → 섬 45% (sunny)
-3. 지출: "치킨 18000원" → 침몰! 🌊
-4. 퀴즈 정답 → 섬 복구 (70%)
-5. 수입: "용돈 20000원" → 초록색 표시
-6. 가계부 아이콘 → 전체 내역 확인
-
----
-
-## 앞으로의 제작 과정 (로드맵)
+## 🎮 핵심 게임 루프
 
 ```mermaid
-flowchart TD
-    subgraph done [DONE - 완료]
-        P1["Phase 1: UI Skeleton + Mock State"]
-        P15["Phase 1.5: 일일예산 + NLP + 퀴즈 + 캐릭터 + 히스토리"]
-    end
-
-    subgraph next [Phase 2: Supabase 연동]
-        S1["2-1. 테이블 생성<br/>users + transactions"]
-        S2["2-2. 데모 유저 자동 생성<br/>localStorage에 user_id 저장"]
-        S3["2-3. 거래 CRUD 연동<br/>insert, select, update, delete"]
-        S4["2-4. localStorage → DB 전환<br/>Zustand persist에서 Supabase로"]
-    end
-
-    subgraph phase3 [Phase 3: OpenAI 연동]
-        A1["3-1. NLP live 모드<br/>gpt-4o-mini 연동"]
-        A2["3-2. /api/quiz 라우트<br/>AI 퀴즈 생성"]
-        A3["3-3. 퀴즈 연동<br/>사용자 지출 기반 문제 생성"]
-    end
-
-    subgraph phase4 [Phase 4: 배포 + 발표]
-        D1["4-1. Vercel 배포"]
-        D2["4-2. PWA 아이콘 생성"]
-        D3["4-3. 데모 스크립트 작성"]
-        D4["4-4. 발표 준비"]
-    end
-
-    P1 --> P15
-    P15 --> S1
-    S1 --> S2
-    S2 --> S3
-    S3 --> S4
-    S4 --> A1
-    A1 --> A2
-    A2 --> A3
-    A3 --> D1
-    D1 --> D2
-    D2 --> D3
-    D3 --> D4
+graph LR
+    A[채팅 입력] --> B[NLP 파싱]
+    B --> C[거래 저장]
+    C --> D[비율 계산]
+    D --> E{예산 사용률}
+    E -->|0-70%| F[SAFE]
+    E -->|70-100%| G[WARNING]
+    E -->|100%+| H[SUNK]
+    F --> I[섬 표시]
+    G --> J[경고 시스템]
+    H --> K[복구 퀴즈]
+    K --> I
+    J --> I
 ```
 
-### Phase 2: Supabase 연동 (예상 2~3시간)
-
-| 단계 | 작업 | 파일 |
-|---|---|---|
-| 2-1 | `users`, `transactions` 테이블 생성 + 인덱스 | Supabase Dashboard |
-| 2-2 | 첫 방문 시 데모 유저 생성 → localStorage에 user_id | `lib/supabase.ts` (신규) |
-| 2-3 | 거래 insert/select/update/delete | `lib/supabase.ts` + `store/useStore.ts` |
-| 2-4 | Zustand persist → Supabase fallback 구조 | `store/useStore.ts` |
-
-### Phase 3: OpenAI 연동 (예상 1~2시간)
-
-| 단계 | 작업 | 파일 |
-|---|---|---|
-| 3-1 | `.env.local`에서 `AI_MODE=live` 전환 | `.env.local` |
-| 3-2 | `/api/quiz` 라우트 생성 (mock + live) | `app/api/quiz/route.ts` (신규) |
-| 3-3 | RescueQuizModal에서 API 호출 연동 | `features/rescue/RescueQuizModal.tsx` |
-
-### Phase 4: 배포 + 마무리 (예상 1시간)
-
-| 단계 | 작업 | 비고 |
-|---|---|---|
-| 4-1 | `vercel deploy` | Supabase URL + OpenAI key 환경변수 설정 |
-| 4-2 | 192x192, 512x512 아이콘 생성 | `public/icon-192.png`, `public/icon-512.png` |
-| 4-3 | 1분 데모 스크립트 정리 | — |
-| 4-4 | 심사위원 질문 대비 | — |
-
----
-
-## Cursor vs Claude Code 비교
-
-| 항목 | Cursor | Claude Code |
-|---|---|---|
-| **인터페이스** | GUI IDE (파일 트리, 탭, 미리보기) | 터미널 기반 |
-| **기획 논의** | Plan 모드로 명확히 분리 | 대화로 섞임 |
-| **멀티파일 수정** | 하나씩 확인 필요 | 일괄 수정에 강함 |
-| **시각적 확인** | 에디터 내 미리보기 | 브라우저 직접 확인 |
-| **git 워크플로** | 수동 | 자연스러운 CLI 통합 |
-| **컨텍스트 유지** | 대화 길어지면 잊기 쉬움 | CLAUDE.md로 영구 유지 |
-| **scaffolding** | 유리 (npx, init 등) | 동일 |
-| **비고** | Phase 1~1.5에 적합 | Phase 2~4에 적합 |
-
----
-
-## Claude Code 작업 가이드
-
-> 이 프로젝트를 Claude Code에서 이어서 작업할 때의 핵심 규칙
-
-### 절대 규칙
-1. **`NEXT_PUBLIC_AI_MODE=mock`** 기본값 유지. live 전환 시 반드시 수동으로.
-2. **파일당 200줄 이하** 유지. 초과 시 분리.
-3. **`features/` 간 직접 임포트 금지**. 반드시 `lib/` 또는 `utils/`를 통해서.
-4. **OpenAI 호출은 서버 라우트 핸들러에서만**. 클라이언트 직접 호출 금지.
-5. **비밀 키를 콘솔에 출력 금지**. `env.ts` 검증만 사용.
-
-### 작업 순서
-```
-Phase 2 시작 → Supabase 대시보드에서 테이블 생성
-→ lib/supabase.ts 작성
-→ useStore.ts에 DB 연동 로직 추가
-→ 빌드 확인 (npm run build)
-→ Phase 3 진행
-```
-
-### 자주 쓸 명령어
-```bash
-npm run dev          # 개발 서버
-npm run build        # 프로덕션 빌드 (타입 체크 포함)
-npx shadcn add [컴포넌트]  # UI 컴포넌트 추가
-```
-
-### 카테고리 코드 참조
-```
-coffee | food | transport | drink | shopping | entertainment | health | etc
-☕      🍚     🚕         🍺      🛍️        🎮              💊       💸
+**예산 공식**:
+```typescript
+dailyBudget = Math.floor(monthlyBudget / 30)
+ratio = todaySpend / dailyBudget
+waterLevel = Math.min(ratio * 100, 100)
 ```
 
 ---
 
-## 라이선스
+## 🔧 주요 트러블슈팅
 
-해커톤 프로젝트 — 비상업적 용도
+### 1. 소수점 화폐 표시 버그
+**문제**: "3,000.333원" 같은 소수점 표시  
+**해결**: `Math.floor()`로 정수 변환
+
+### 2. 대화 말풍선이 물에 가려지는 문제
+**문제**: z-index 스태킹 컨텍스트 이슈  
+**해결**: 캐릭터와 말풍선을 별도 DOM 요소로 분리
+
+### 3. 경고 타이머가 사라지지 않는 버그
+**문제**: `useEffect` 의존성 배열 문제  
+**해결**: 불필요한 의존성 제거
+
+자세한 내용은 [HACKATHON_SUBMISSION.md](./HACKATHON_SUBMISSION.md#-3-기술적-문제-발생-시-해결-사례-troubleshooting)를 참조하세요.
+
+---
+
+## 📈 향후 계획
+
+### 단기 (1개월)
+- [ ] PWA 변환 (홈 화면 추가)
+- [ ] 푸시 알림 시스템
+- [ ] 더 많은 섬 테마
+
+### 중기 (3개월)
+- [ ] 실제 은행 연동 (Plaid API)
+- [ ] AI 추천 시스템
+- [ ] 커뮤니티 기능
+
+### 장기 (6개월)
+- [ ] iOS/Android 앱 (React Native)
+- [ ] 수익화 (프리미엄 테마)
+- [ ] 글로벌 확장 (다국어 지원)
+
+---
+
+## 🤝 기여하기
+
+기여는 언제나 환영입니다!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 라이선스
+
+이 프로젝트는 MIT 라이선스 하에 배포됩니다.
+
+---
+
+## 📧 연락처
+
+프로젝트 링크: [https://github.com/wldnfkrhakfgo424-arch/ggumjisum](https://github.com/wldnfkrhakfgo424-arch/ggumjisum)
+
+라이브 데모: [https://ggumjisum.vercel.app](https://ggumjisum.vercel.app)
+
+---
+
+## 🙏 감사의 말
+
+- [Next.js](https://nextjs.org/) - 최고의 React 프레임워크
+- [Framer Motion](https://www.framer.com/motion/) - 부드러운 애니메이션
+- [Supabase](https://supabase.com/) - 완벽한 BaaS 플랫폼
+- [Vercel](https://vercel.com/) - 최고의 배포 경험
+
+---
+
+<div align="center">
+
+**거지섬에서 당신의 섬을 지켜보세요!** 🏝️
+
+Made with ❤️ for Hackathon 2026
+
+</div>
