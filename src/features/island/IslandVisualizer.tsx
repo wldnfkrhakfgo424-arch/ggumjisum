@@ -341,12 +341,12 @@ export function IslandVisualizer({ onCharacterClick }: IslandVisualizerProps = {
 
   return (
     <div className="relative w-full aspect-[4/3] max-w-md mx-auto overflow-hidden rounded-2xl shadow-2xl">
-      {/* 목표 현수막 - 픽셀 아트 스타일, 나무 꼭대기 */}
+      {/* 목표 현수막 - 픽셀 아트 스타일, 화면 하단 */}
       {user?.goal && (
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="absolute top-[3%] left-1/2 transform -translate-x-1/2 z-30 pointer-events-none"
+          className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-30 pointer-events-none"
         >
           {/* 픽셀 아트 현수막 */}
           <div className="relative">
@@ -357,12 +357,9 @@ export function IslandVisualizer({ onCharacterClick }: IslandVisualizerProps = {
             
             {/* 현수막 본체 */}
             <div className="bg-white border-2 border-gray-800 px-3 py-1.5 shadow-lg" style={{ imageRendering: 'pixelated' }}>
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs">🎯</span>
-                <p className="text-xs font-bold text-gray-800 whitespace-nowrap">
-                  {user.goal}
-                </p>
-              </div>
+              <p className="text-xs font-bold text-gray-800 whitespace-nowrap text-center">
+                {user.goal}
+              </p>
             </div>
             
             {/* 하단 픽셀 프린지 */}
