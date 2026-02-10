@@ -341,35 +341,17 @@ export function IslandVisualizer({ onCharacterClick }: IslandVisualizerProps = {
 
   return (
     <div className="relative w-full aspect-[4/3] max-w-md mx-auto overflow-hidden rounded-2xl shadow-2xl">
-      {/* 목표 현수막 - 픽셀 아트 스타일, 화면 하단 */}
+      {/* 목표 배너 - HP 바 옆, 같은 높이 */}
       {user?.goal && (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="absolute bottom-3 left-1/2 transform -translate-x-1/2 z-30 pointer-events-none"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="absolute top-3 right-3 z-30 pointer-events-none"
         >
-          {/* 픽셀 아트 현수막 */}
-          <div className="relative">
-            {/* 끈 - 왼쪽 */}
-            <div className="absolute -top-3 left-4 w-0.5 h-3 bg-amber-900"></div>
-            {/* 끈 - 오른쪽 */}
-            <div className="absolute -top-3 right-4 w-0.5 h-3 bg-amber-900"></div>
-            
-            {/* 현수막 본체 */}
-            <div className="bg-white border-2 border-gray-800 px-3 py-1.5 shadow-lg" style={{ imageRendering: 'pixelated' }}>
-              <p className="text-xs font-bold text-gray-800 whitespace-nowrap text-center">
-                {user.goal}
-              </p>
-            </div>
-            
-            {/* 하단 픽셀 프린지 */}
-            <div className="flex justify-around -mt-px">
-              <div className="w-1 h-1 bg-gray-800"></div>
-              <div className="w-1 h-1 bg-gray-800"></div>
-              <div className="w-1 h-1 bg-gray-800"></div>
-              <div className="w-1 h-1 bg-gray-800"></div>
-              <div className="w-1 h-1 bg-gray-800"></div>
-            </div>
+          <div className="bg-white/95 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-md border border-blue-300 flex items-center">
+            <p className="text-[10px] font-bold text-blue-700 whitespace-nowrap">
+              {user.goal}
+            </p>
           </div>
         </motion.div>
       )}
