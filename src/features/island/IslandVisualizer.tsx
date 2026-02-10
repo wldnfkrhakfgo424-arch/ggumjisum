@@ -277,6 +277,13 @@ export function IslandVisualizer({ onCharacterClick, readonly = false, visitorDa
   } as any : storeData.user;
   const island_level = readonly && visitorData ? visitorData.island_level : storeData.island_level;
   
+  // readonly 모드에서는 레벨업/스트릭 관련 값들을 비활성화
+  const justLeveledUp = readonly ? false : storeData.justLeveledUp;
+  const clearLevelUp = readonly ? (() => {}) : storeData.clearLevelUp;
+  const justStreakReward = readonly ? null : storeData.justStreakReward;
+  const clearStreakReward = readonly ? (() => {}) : storeData.clearStreakReward;
+  const streakRewards = readonly ? [] : storeData.streakRewards;
+  
   // ratio 계산
   const dailyBudget = user?.budget_limit ? Math.floor(user.budget_limit / 30) : 0;
   const ratio = dailyBudget > 0 ? today_spend / dailyBudget : 0;
