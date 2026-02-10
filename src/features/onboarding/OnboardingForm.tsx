@@ -67,7 +67,7 @@ export function OnboardingForm() {
   const steps = [
     {
       title: '반가워요! 👋',
-      description: '꿈지섬에 오신 걸 환영해요',
+      description: '거지섬에 오신 걸 환영해요',
       content: (
         <div className="space-y-4">
           <div>

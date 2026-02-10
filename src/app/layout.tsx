@@ -13,13 +13,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "꿈지섬 - 게이미피케이션 예산 트래커",
+  title: "거지섬 - 게이미피케이션 예산 트래커",
   description: "섬이 가라앉기 전에 지출을 관리하세요!",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "꿈지섬",
+    title: "거지섬",
   },
 };
 
