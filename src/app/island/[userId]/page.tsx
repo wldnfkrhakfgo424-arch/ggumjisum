@@ -187,10 +187,10 @@ export default function VisitIslandPage() {
         <IslandVisualizer 
           readonly={true}
           visitorData={{
-            today_spend: island.today_spend || 0,
-            budget_limit: island.budget_limit || 0,
-            island_level: island.island_level,
-            island_status: island.island_status,
+            today_spend: island.today_spend ?? 0,
+            budget_limit: island.budget_limit ?? 0,
+            island_level: island.island_level ?? 0,
+            island_status: island.island_status ?? 'safe',
             nickname: island.nickname,
             goal: island.goal,
           }}
