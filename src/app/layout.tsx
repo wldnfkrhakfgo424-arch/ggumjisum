@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "거지섬 - 게이미피케이션 예산 트래커",
-  description: "섬이 가라앉기 전에 지출을 관리하세요!",
+  title: "거지섬 - 생존 게임형 가계부",
+  description: "하루 예산을 초과하면, 섬이 침몰한다! 예산을 지키며 섬을 발전시키는 생존 게임형 가계부",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,

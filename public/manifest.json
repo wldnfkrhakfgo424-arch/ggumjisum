@@ -1,7 +1,7 @@
 {
   "name": "거지섬",
   "short_name": "거지섬",
-  "description": "게이미피케이션 예산 트래커",
+  "description": "하루 예산을 초과하면, 섬이 침몰한다! 생존 게임형 가계부",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#87CEEB",

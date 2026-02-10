@@ -67,17 +67,17 @@ export default function LandingPage() {
               거지섬
             </h1>
             
-            <p className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-              섬이 가라앉기 전에
+            <p className="text-4xl md:text-5xl font-black text-gray-900 mb-4">
+              하루 예산을 초과하면,
             </p>
-            <p className="text-3xl md:text-4xl font-bold text-gray-800 mb-12">
-              지출을 관리하세요!
+            <p className="text-4xl md:text-5xl font-black text-red-600 mb-12">
+              섬이 침몰한다! 💥
             </p>
             
             <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
-              게이미피케이션 × 일일 예산 트래커<br />
-              지출할수록 섬이 물에 잠기는 시각적 경고로<br />
-              <span className="font-bold text-blue-600">Gen Z의 소비 습관을 바꿉니다</span>
+              <span className="font-bold text-blue-600 text-2xl">생존 게임형 가계부</span><br />
+              예산을 지키면 섬이 발전하고, 초과하면 물에 잠기는<br />
+              <span className="font-bold text-blue-600">긴박한 예산 관리 경험</span>
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
