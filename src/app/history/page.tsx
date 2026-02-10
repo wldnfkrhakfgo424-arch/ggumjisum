@@ -37,8 +37,9 @@ export default function HistoryPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-sky-100 to-blue-200">
-      {/* Header */}
-      <header className="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-gray-200">
+      <div className="max-w-md mx-auto min-h-screen bg-gradient-to-b from-sky-100 to-blue-200">
+        {/* Header */}
+        <header className="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-gray-200">
         <div className="flex items-center justify-between p-4">
           <Button variant="ghost" size="icon" onClick={() => router.back()}>
             <ArrowLeft className="w-5 h-5" />
@@ -159,6 +160,7 @@ export default function HistoryPage() {
         ) : (
           <AnalyticsCharts transactions={filteredTransactions} />
         )}
+      </div>
       </div>
     </div>
   );

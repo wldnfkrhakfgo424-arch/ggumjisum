@@ -114,9 +114,10 @@ export default function IslandPage() {
   const levelInfo = getIslandLevelInfo();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-100 to-blue-200 pb-4">
-      {/* Header */}
-      <header className="flex items-center justify-between p-4">
+    <div className="min-h-screen bg-gradient-to-b from-sky-100 to-blue-200">
+      <div className="max-w-md mx-auto min-h-screen bg-gradient-to-b from-sky-100 to-blue-200 pb-4">
+        {/* Header */}
+        <header className="flex items-center justify-between p-4">
         <div className="space-y-1">
           <div>
             <h1 className="text-lg font-bold text-gray-800">
@@ -203,7 +204,7 @@ export default function IslandPage() {
       </header>
 
       {/* Island */}
-      <main className="px-1 space-y-1">
+      <main className="px-4 space-y-2">
         <div className="relative min-h-[400px]">
           <IslandVisualizer />
           <NeighborIslands />
@@ -279,6 +280,7 @@ export default function IslandPage() {
 
       {/* Quiz Modal */}
       <RescueQuizModal />
+      </div>
     </div>
   );
 }

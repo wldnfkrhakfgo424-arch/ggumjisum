@@ -73,9 +73,10 @@ export default function LeaderboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-100 to-blue-200 pb-4">
-      {/* Header */}
-      <header className="flex items-center justify-between p-4">
+    <div className="min-h-screen bg-gradient-to-b from-sky-100 to-blue-200">
+      <div className="max-w-md mx-auto min-h-screen bg-gradient-to-b from-sky-100 to-blue-200 pb-4">
+        {/* Header */}
+        <header className="flex items-center justify-between p-4">
         <Button
           variant="ghost"
           size="icon"
@@ -196,6 +197,7 @@ export default function LeaderboardPage() {
             );
           })
         )}
+      </div>
       </div>
     </div>
   );
