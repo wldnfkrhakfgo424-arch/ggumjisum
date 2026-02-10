@@ -13,6 +13,7 @@ export function OnboardingForm() {
   const { setUser, resetSpend } = useStore();
   const [step, setStep] = useState(0);
   const [nickname, setNickname] = useState('');
+  const [goal, setGoal] = useState('');
   const [budgetLimit, setBudgetLimit] = useState('');
   const [resetDay, setResetDay] = useState('1');
   const [error, setError] = useState('');
@@ -49,6 +50,7 @@ export function OnboardingForm() {
     const user = {
       id: crypto.randomUUID(),
       nickname: nickname.trim(),
+      goal: goal.trim() || undefined,
       budget_limit: budget,
       reset_day: day,
     };
@@ -81,6 +83,20 @@ export function OnboardingForm() {
               maxLength={20}
               autoFocus
             />
+          </div>
+          <div>
+            <label className="text-sm font-medium text-gray-700 mb-1 block">
+              어떤 목표가 있나요? 🎯
+            </label>
+            <Input
+              value={goal}
+              onChange={(e) => setGoal(e.target.value)}
+              placeholder="예: 돈 모아서 일본 여행 가기"
+              maxLength={50}
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              섬 화면에 현수막으로 표시돼요!
+            </p>
           </div>
         </div>
       ),

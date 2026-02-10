@@ -118,67 +118,16 @@ export default function IslandPage() {
       <div className="max-w-md mx-auto min-h-screen bg-gradient-to-b from-sky-100 to-blue-200 pb-4">
         {/* Header */}
         <header className="flex items-center justify-between p-4">
-        <div className="space-y-1">
-          <div>
+        <div>
+          {/* 닉네임 + 레벨을 한 줄에 */}
+          <div className="flex items-center gap-2 flex-wrap">
             <h1 className="text-lg font-bold text-gray-800">
               {user.nickname}의 섬 🏝️
             </h1>
-            <p className="text-xs text-gray-600">
-              오늘 남은 예산: {Math.floor(remainingBudget).toLocaleString()}원
-            </p>
-          </div>
-          {/* 섬 레벨 / EXP / 스트릭 */}
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="bg-white/60 backdrop-blur rounded-full px-3 py-1 inline-flex items-center gap-2">
-              <span className="text-[10px] font-semibold text-purple-700">
+            <div className="bg-purple-100/80 backdrop-blur rounded-full px-2.5 py-1 inline-flex items-center gap-1.5">
+              <span className="text-[11px] font-bold text-purple-700">
                 Lv.{island_level} {ISLAND_LEVELS[island_level]?.name}
               </span>
-              {levelInfo.next && (
-                <>
-                  <div className="w-20 h-1.5 bg-purple-100 rounded-full overflow-hidden">
-                    <div
-                      className="h-full bg-gradient-to-r from-purple-400 to-pink-400"
-                      style={{ width: `${Math.min(levelInfo.progress * 100, 100)}%` }}
-                    />
-                  </div>
-                  <span className="text-[10px] text-gray-600">
-                    다음 단계까지 {levelInfo.remaining}일
-                  </span>
-                </>
-              )}
-              {!levelInfo.next && (
-                <span className="text-[10px] text-emerald-600">
-                  최종 단계 섬이에요 🎉
-                </span>
-              )}
-            </div>
-            <div
-              className={`rounded-full px-3 py-1 inline-flex items-center gap-2 text-[10px] ${
-                currentStreak >= 7
-                  ? 'bg-orange-100 text-orange-700'
-                  : currentStreak >= 3
-                  ? 'bg-emerald-100 text-emerald-700'
-                  : 'bg-gray-100 text-gray-600'
-              }`}
-            >
-              <span>
-                {currentStreak >= 7
-                  ? '🔥'
-                  : currentStreak >= 3
-                  ? '🌟'
-                  : '📅'}
-              </span>
-              <span>연속 절약 {currentStreak}일</span>
-              {bestStreak > 0 && (
-                <span className="opacity-70">
-                  최고 {bestStreak}일
-                </span>
-              )}
-              {(streakRewards.threeDaysUnlocked || streakRewards.sevenDaysUnlocked) && (
-                <span className="opacity-70">
-                  {streakRewards.sevenDaysUnlocked ? '스트릭 장식 2개 보유' : '스트릭 장식 1개 보유'}
-                </span>
-              )}
             </div>
           </div>
         </div>

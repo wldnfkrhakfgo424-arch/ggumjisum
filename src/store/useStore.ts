@@ -35,6 +35,7 @@ export function getNextLevelInfo(exp: number) {
 export interface User {
   id: string;
   nickname: string;
+  goal?: string;
   budget_limit: number;
   reset_day: number;
 }

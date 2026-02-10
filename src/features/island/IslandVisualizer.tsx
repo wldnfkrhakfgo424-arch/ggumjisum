@@ -341,6 +341,42 @@ export function IslandVisualizer({ onCharacterClick }: IslandVisualizerProps = {
 
   return (
     <div className="relative w-full aspect-[4/3] max-w-md mx-auto overflow-hidden rounded-2xl shadow-2xl">
+      {/* 목표 현수막 - 픽셀 아트 스타일, 나무 꼭대기 */}
+      {user?.goal && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="absolute top-[3%] left-1/2 transform -translate-x-1/2 z-30 pointer-events-none"
+        >
+          {/* 픽셀 아트 현수막 */}
+          <div className="relative">
+            {/* 끈 - 왼쪽 */}
+            <div className="absolute -top-3 left-4 w-0.5 h-3 bg-amber-900"></div>
+            {/* 끈 - 오른쪽 */}
+            <div className="absolute -top-3 right-4 w-0.5 h-3 bg-amber-900"></div>
+            
+            {/* 현수막 본체 */}
+            <div className="bg-white border-2 border-gray-800 px-3 py-1.5 shadow-lg" style={{ imageRendering: 'pixelated' }}>
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs">🎯</span>
+                <p className="text-xs font-bold text-gray-800 whitespace-nowrap">
+                  {user.goal}
+                </p>
+              </div>
+            </div>
+            
+            {/* 하단 픽셀 프린지 */}
+            <div className="flex justify-around -mt-px">
+              <div className="w-1 h-1 bg-gray-800"></div>
+              <div className="w-1 h-1 bg-gray-800"></div>
+              <div className="w-1 h-1 bg-gray-800"></div>
+              <div className="w-1 h-1 bg-gray-800"></div>
+              <div className="w-1 h-1 bg-gray-800"></div>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       {/* 하늘 배경 */}
       <motion.div
         className="absolute inset-0"
@@ -681,13 +717,13 @@ export function IslandVisualizer({ onCharacterClick }: IslandVisualizerProps = {
         </motion.div>
       )}
 
-      {/* HP 바 */}
-      <div className="absolute top-3 left-3 right-3">
-        <div className="bg-black/30 backdrop-blur-sm rounded-full px-4 py-2 flex items-center gap-3">
-          <span className="text-white text-xs opacity-70 whitespace-nowrap">
+      {/* HP 바 - 맨 위 배치 */}
+      <div className="absolute top-3 left-3" style={{ right: '30%' }}>
+        <div className="bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5 flex items-center gap-2">
+          <span className="text-white text-[10px] opacity-80 whitespace-nowrap">
             예산
           </span>
-          <div className="flex-1 h-3 bg-gray-700/50 rounded-full overflow-hidden border border-gray-600/30 relative">
+          <div className="flex-1 h-2.5 bg-gray-700/50 rounded-full overflow-hidden border border-gray-600/30 relative">
             <motion.div
               className="h-full rounded-full"
               animate={{
@@ -701,45 +737,10 @@ export function IslandVisualizer({ onCharacterClick }: IslandVisualizerProps = {
               transition={{ duration: 0.5 }}
             />
           </div>
-          <span className="text-white text-sm font-bold whitespace-nowrap">
+          <span className="text-white text-xs font-bold whitespace-nowrap">
             {remainingBudget.toLocaleString()}원
           </span>
         </div>
-        {(streakRewards.threeDaysUnlocked || streakRewards.sevenDaysUnlocked) && (
-          <div className="absolute top-12 right-0 bg-black/30 backdrop-blur-sm rounded-full px-2 py-1 text-[10px] text-amber-200 flex items-center gap-1">
-            <span>{streakRewards.sevenDaysUnlocked ? '🔥' : '🌟'}</span>
-            <span>
-              스트릭 장식 {streakRewards.sevenDaysUnlocked ? '2개' : '1개'} 보유
-            </span>
-          </div>
-        )}
-      </div>
-
-      {/* 예산 게이지 */}
-      <div className="absolute bottom-3 left-3 right-3">
-        <div className="bg-black/30 backdrop-blur-sm rounded-full h-3 overflow-hidden">
-          <motion.div
-            className="h-full rounded-full"
-            animate={{
-              width: `${Math.min(waterLevel, 100)}%`,
-              backgroundColor:
-                ratio < 0.4
-                  ? '#4ade80'
-                  : ratio < 0.7
-                  ? '#fbbf24'
-                  : ratio < 1
-                  ? '#f97316'
-                  : '#ef4444',
-            }}
-            transition={{ duration: 0.5 }}
-          />
-        </div>
-        {user && (
-          <div className="flex justify-between items-center text-white/70 text-xs mt-1">
-            <span>일일 예산: {Math.floor(dailyBudget).toLocaleString()}원</span>
-            <span>오늘 남은: {Math.floor(remainingBudget).toLocaleString()}원</span>
-          </div>
-        )}
       </div>
     </div>
   );
