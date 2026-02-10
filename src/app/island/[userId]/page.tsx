@@ -115,7 +115,9 @@ export default function VisitIslandPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-sky-100 to-blue-200">
-        <p>로딩 중...</p>
+        <div className="max-w-md mx-auto">
+          <p>로딩 중...</p>
+        </div>
       </div>
     );
   }
@@ -123,16 +125,19 @@ export default function VisitIslandPage() {
   if (!island) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-sky-100 to-blue-200">
-        <p className="text-gray-600 mb-4">섬을 찾을 수 없습니다</p>
-        <Button onClick={() => router.back()}>돌아가기</Button>
+        <div className="max-w-md mx-auto text-center">
+          <p className="text-gray-600 mb-4">섬을 찾을 수 없습니다</p>
+          <Button onClick={() => router.back()}>돌아가기</Button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-sky-100 to-blue-200 pb-4">
-      {/* Header */}
-      <header className="flex items-center justify-between p-4">
+    <div className="min-h-screen bg-gradient-to-b from-sky-100 to-blue-200">
+      <div className="max-w-md mx-auto min-h-screen bg-gradient-to-b from-sky-100 to-blue-200 pb-4">
+        {/* Header */}
+        <header className="flex items-center justify-between p-4">
         <Button
           variant="ghost"
           size="icon"
@@ -274,6 +279,7 @@ export default function VisitIslandPage() {
           <Heart className={`w-4 h-4 mr-2 ${cheered ? 'fill-white' : ''}`} />
           {cheered ? '응원했어요! 🎉' : '응원하기'}
         </Button>
+      </div>
       </div>
     </div>
   );
