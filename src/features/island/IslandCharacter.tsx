@@ -208,7 +208,7 @@ export function IslandCharacter({ ratio, onChatOpen }: IslandCharacterProps) {
               zIndex: 50,
               left: '60%',
               transform: 'translateX(-50%)',
-              bottom: ratio >= 0.65 
+              bottom: ratio >= 0.8 
                 ? `${characterBottom - 8}%`  // 캐릭터 아래
                 : `${characterBottom + 25}%`, // 캐릭터 위 (더 위로)
             }}
@@ -216,11 +216,11 @@ export function IslandCharacter({ ratio, onChatOpen }: IslandCharacterProps) {
             <div className="relative bg-white rounded-xl px-3 py-2 shadow-lg border-2 border-gray-300">
               <p className="text-xs font-medium text-gray-800">{currentDialogue}</p>
               {/* 말풍선 꼬리 */}
-              {ratio >= 0.65 ? (
+              {ratio >= 0.8 ? (
                 // 아래 위치일 때: 꼬리가 위로 (더 크고 명확하게)
                 <>
                   <div
-                    className="absolute -top-2 left-1/2 -translate-x-1/2 w-0 h-0"
+                    className="absolute -top-2 left-0.9/2 -translate-x-1/2 w-0 h-0"
                     style={{
                       borderLeft: '8px solid transparent',
                       borderRight: '8px solid transparent',
@@ -228,7 +228,7 @@ export function IslandCharacter({ ratio, onChatOpen }: IslandCharacterProps) {
                     }}
                   />
                   <div
-                    className="absolute -top-3 left-1/2 -translate-x-1/2 w-0 h-0"
+                    className="absolute -top-3 left-0.9/2 -translate-x-1/2 w-0 h-0"
                     style={{
                       borderLeft: '9px solid transparent',
                       borderRight: '9px solid transparent',

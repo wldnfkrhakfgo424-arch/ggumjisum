@@ -6,6 +6,7 @@ import { ArrowLeft, Eye, Heart, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getSupabase, UserIsland } from '@/lib/supabase';
 import { ISLAND_LEVELS, useStore } from '@/store/useStore';
+import { IslandVisualizer } from '@/features/island/IslandVisualizer';
 
 interface IslandTip {
   id: string;
@@ -181,25 +182,19 @@ export default function VisitIslandPage() {
         </div>
       </div>
 
-      {/* Island Visualizer (Simple Version) */}
+      {/* Island Visualizer - 실제 섬 모습 */}
       <div className="px-4 mb-4">
-        <div className="relative">
-          <div className="bg-white/60 backdrop-blur rounded-2xl p-8 text-center">
-            <p className="text-7xl mb-4">
-              {island.island_level === 0 && '🏝️'}
-              {island.island_level === 1 && '⛺'}
-              {island.island_level === 2 && '🏠'}
-              {island.island_level === 3 && '🏡'}
-              {island.island_level === 4 && '🏘️'}
-            </p>
-            <p className="text-gray-700 font-semibold">
-              {island.nickname}님의 {ISLAND_LEVELS[island.island_level]?.name}
-            </p>
-            <p className="text-xs text-gray-500 mt-2">
-              누적 {island.total_saved_days}일 동안 절약 중
-            </p>
-          </div>
-        </div>
+        <IslandVisualizer 
+          readonly={true}
+          visitorData={{
+            today_spend: island.today_spend || 0,
+            budget_limit: island.budget_limit || 0,
+            island_level: island.island_level,
+            island_status: island.island_status,
+            nickname: island.nickname,
+            goal: island.goal,
+          }}
+        />
       </div>
 
       {/* Achievement Info */}

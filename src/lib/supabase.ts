@@ -15,6 +15,9 @@ export type UserIsland = {
   last_synced_at: string;
   created_at: string;
   updated_at: string;
+  island_status?: string;
+  today_spend?: number;
+  goal?: string;
 };
 
 let supabaseClient: ReturnType<typeof createClient> | null = null;

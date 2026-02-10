@@ -249,40 +249,50 @@ function PixelIsland({ sunk, level }: { sunk: boolean; level: number }) {
   );
 }
 
-interface IslandVisualizerProps {
-  onCharacterClick?: () => void;
+interface VisitorData {
+  today_spend: number;
+  budget_limit: number;
+  island_level: number;
+  island_status: string;
+  nickname: string;
+  goal?: string;
 }
 
-export function IslandVisualizer({ onCharacterClick }: IslandVisualizerProps = {}) {
-  const {
-    getRatio,
-    island_status,
-    today_spend,
-    user,
-    getDailyBudget,
-    getRemainingBudget,
-    island_level,
-    getIslandLevelInfo,
-    justLeveledUp,
-    clearLevelUp,
-    justStreakReward,
-    clearStreakReward,
-    streakRewards,
-  } = useStore();
-  const ratio = getRatio();
+interface IslandVisualizerProps {
+  onCharacterClick?: () => void;
+  readonly?: boolean;
+  visitorData?: VisitorData;
+}
+
+export function IslandVisualizer({ onCharacterClick, readonly = false, visitorData }: IslandVisualizerProps = {}) {
+  const storeData = useStore();
+  
+  // readonly 모드면 visitorData 사용, 아니면 store 데이터 사용
+  const island_status = readonly && visitorData ? visitorData.island_status : storeData.island_status;
+  const today_spend = readonly && visitorData ? visitorData.today_spend : storeData.today_spend;
+  const user = readonly && visitorData ? { 
+    nickname: visitorData.nickname, 
+    budget_limit: visitorData.budget_limit,
+    goal: visitorData.goal 
+  } as any : storeData.user;
+  const island_level = readonly && visitorData ? visitorData.island_level : storeData.island_level;
+  
+  // ratio 계산
+  const dailyBudget = user?.budget_limit ? Math.floor(user.budget_limit / 30) : 0;
+  const ratio = dailyBudget > 0 ? today_spend / dailyBudget : 0;
+  const remainingBudget = Math.max(0, dailyBudget - today_spend);
+  
   const waterLevel = Math.min(ratio * 100, 100);
   const weather = getWeather(ratio);
   const colors = weatherColors[weather];
   const isSunk = island_status === 'sunk';
-  const dailyBudget = getDailyBudget();
-  const remainingBudget = getRemainingBudget();
-  const levelInfo = getIslandLevelInfo();
+  const levelInfo = ISLAND_LEVELS[island_level] || ISLAND_LEVELS[0];
 
-  // 남은 시간 계산 (경고용)
+  // 남은 시간 계산 (경고용) - readonly 모드에서는 비활성화
   const [timeLeft, setTimeLeft] = useState('');
   
   useEffect(() => {
-    if (ratio < 0.7) {
+    if (readonly || ratio < 0.7) {
       setTimeLeft('');
       return;
     }
@@ -301,13 +311,15 @@ export function IslandVisualizer({ onCharacterClick }: IslandVisualizerProps = {
     const interval = setInterval(updateTime, 1000);
     
     return () => clearInterval(interval);
-  }, [ratio]);
+  }, [ratio, readonly]);
 
-  // 70% 경고 표시 관리
+  // 70% 경고 표시 관리 - readonly 모드에서는 비활성화
   const [showBigWarning, setShowBigWarning] = useState(false);
   const [hasShownWarning70, setHasShownWarning70] = useState(false);
   
   useEffect(() => {
+    if (readonly) return;
+    
     // 70% 미만으로 떨어지면 리셋
     if (ratio < 0.7) {
       setHasShownWarning70(false);
@@ -324,12 +336,14 @@ export function IslandVisualizer({ onCharacterClick }: IslandVisualizerProps = {
       }, 4000); // 4초 후 큰 경고 사라짐
       return () => clearTimeout(timer);
     }
-  }, [ratio]);
+  }, [ratio, readonly]);
 
-  // 예산 초과 안내 오버레이
+  // 예산 초과 안내 오버레이 - readonly 모드에서는 비활성화
   const [showOverBudgetMessage, setShowOverBudgetMessage] = useState(false);
   
   useEffect(() => {
+    if (readonly) return;
+    
     if (ratio >= 1 && !showOverBudgetMessage) {
       setShowOverBudgetMessage(true);
       const timer = setTimeout(() => {
@@ -337,7 +351,7 @@ export function IslandVisualizer({ onCharacterClick }: IslandVisualizerProps = {
       }, 3000);
       return () => clearTimeout(timer);
     }
-  }, [ratio, showOverBudgetMessage]);
+  }, [ratio, showOverBudgetMessage, readonly]);
 
   return (
     <div className="relative w-full aspect-[4/3] max-w-md mx-auto overflow-hidden rounded-2xl shadow-2xl">
@@ -516,9 +530,9 @@ export function IslandVisualizer({ onCharacterClick }: IslandVisualizerProps = {
         )}
       </AnimatePresence>
 
-      {/* 70% 큰 경고 (일시적) */}
+      {/* 70% 큰 경고 (일시적) - readonly 모드에서는 숨김 */}
       <AnimatePresence>
-        {showBigWarning && ratio >= 0.7 && ratio < 1 && (
+        {!readonly && showBigWarning && ratio >= 0.7 && ratio < 1 && (
           <motion.div
             className="absolute top-2 left-1/2 -translate-x-1/2 z-30 flex flex-col items-center gap-2 pointer-events-none"
             initial={{ opacity: 0, y: -20 }}
@@ -582,9 +596,9 @@ export function IslandVisualizer({ onCharacterClick }: IslandVisualizerProps = {
         )}
       </AnimatePresence>
 
-      {/* 70% 작은 표지판 (지속) */}
+      {/* 70% 작은 표지판 (지속) - readonly 모드에서는 숨김 */}
       <AnimatePresence>
-        {!showBigWarning && ratio >= 0.7 && ratio < 1 && (
+        {!readonly && !showBigWarning && ratio >= 0.7 && ratio < 1 && (
           <motion.div
             className="absolute top-16 left-3 z-20 pointer-events-none"
             initial={{ opacity: 0, x: -20 }}
@@ -630,9 +644,9 @@ export function IslandVisualizer({ onCharacterClick }: IslandVisualizerProps = {
         )}
       </AnimatePresence>
 
-      {/* 예산 초과 안내 오버레이 */}
+      {/* 예산 초과 안내 오버레이 - readonly 모드에서는 숨김 */}
       <AnimatePresence>
-        {showOverBudgetMessage && ratio >= 1 && (
+        {!readonly && showOverBudgetMessage && ratio >= 1 && (
           <motion.div
             className="absolute inset-0 flex items-center justify-center z-50 bg-black/70 backdrop-blur-sm"
             initial={{ opacity: 0 }}
@@ -696,31 +710,33 @@ export function IslandVisualizer({ onCharacterClick }: IslandVisualizerProps = {
         </motion.div>
       )}
 
-      {/* HP 바 - 맨 위 배치 */}
-      <div className="absolute top-3 left-3" style={{ right: '30%' }}>
-        <div className="bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5 flex items-center gap-2">
-          <span className="text-white text-[10px] opacity-80 whitespace-nowrap">
-            예산
-          </span>
-          <div className="flex-1 h-2.5 bg-gray-700/50 rounded-full overflow-hidden border border-gray-600/30 relative">
-            <motion.div
-              className="h-full rounded-full"
-              animate={{
-                width: `${Math.max(0, (1 - ratio) * 100)}%`,
-                backgroundColor: 
-                  ratio >= 1 ? '#dc2626' :
-                  ratio >= 0.7 ? '#f59e0b' : 
-                  ratio >= 0.4 ? '#facc15' : 
-                  '#10b981',
-              }}
-              transition={{ duration: 0.5 }}
-            />
+      {/* HP 바 - 맨 위 배치 (readonly 모드에서는 숨김) */}
+      {!readonly && (
+        <div className="absolute top-3 left-3" style={{ right: '30%' }}>
+          <div className="bg-black/40 backdrop-blur-sm rounded-full px-3 py-1.5 flex items-center gap-2">
+            <span className="text-white text-[10px] opacity-80 whitespace-nowrap">
+              예산
+            </span>
+            <div className="flex-1 h-2.5 bg-gray-700/50 rounded-full overflow-hidden border border-gray-600/30 relative">
+              <motion.div
+                className="h-full rounded-full"
+                animate={{
+                  width: `${Math.max(0, (1 - ratio) * 100)}%`,
+                  backgroundColor: 
+                    ratio >= 1 ? '#dc2626' :
+                    ratio >= 0.7 ? '#f59e0b' : 
+                    ratio >= 0.4 ? '#facc15' : 
+                    '#10b981',
+                }}
+                transition={{ duration: 0.5 }}
+              />
+            </div>
+            <span className="text-white text-xs font-bold whitespace-nowrap">
+              {remainingBudget.toLocaleString()}원
+            </span>
           </div>
-          <span className="text-white text-xs font-bold whitespace-nowrap">
-            {remainingBudget.toLocaleString()}원
-          </span>
         </div>
-      </div>
+      )}
     </div>
   );
 }
